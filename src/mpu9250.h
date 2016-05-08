@@ -2,6 +2,9 @@
 #ifndef MPU9250_H
 #define MPU9250_H
 
+#include "i2c.h"
+
+
 #define MPU9250_ADDRESS                     0x69
 
 
@@ -119,10 +122,20 @@
 class MPU9250
 {
     private:
+        I2C* mI2C;
        
         
     public:
         
+        /*
+         * constructor
+         */
+        MPU9250(void);
+        
+        /**
+         * @return if the MPU9250 is available or not
+         */
+        bool available(void);
        
 };
 
