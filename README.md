@@ -14,3 +14,22 @@ he 3.3v output pin of the arduino due.
 
 
 	Requirements: https://github.com/ramsondon/arduino-i2c
+
+
+```c
+#include "mpu9250.h"
+
+void setup() {
+  // put your setup code here, to run once:
+  Serial.begin(9600);
+  
+  MPU9250* mpu = new MPU9250();
+  if (true == mpu->available()) {
+    Serial.println("mpu init success");
+  } else {
+    Serial.println("mpu init with failures");
+  }
+}
+
+void loop() {}
+```
