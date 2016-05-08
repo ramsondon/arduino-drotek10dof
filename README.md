@@ -19,17 +19,30 @@
 ```c
 #include "mpu9250.h"
 
+MPU9250* mpu;
+
 void setup() {
   // put your setup code here, to run once:
   Serial.begin(9600);
   
-  MPU9250* mpu = new MPU9250();
+  mpu = new MPU9250();
+  
   if (true == mpu->available()) {
     Serial.println("mpu init success");
+    mpu->init();
+    
   } else {
     Serial.println("mpu init with failures");
+    while(1) ; // Loop forever if communication doesn't happen
   }
 }
 
-void loop() {}
+void loop() {
+  mpu->receive();
+  Serial.print("gyro: X-Axis: "); Serial.print(mpu->gyro_x);
+  Serial.print(" Y-Axis: "); Serial.print(mpu->gyro_y);
+  Serial.print(" Z-Axis: "); Serial.println(mpu->gyro_z);
+  delay(100);
+}
+
 ```
