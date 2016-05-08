@@ -149,9 +149,29 @@ class MPU9250
         uint8_t mGyroScale = GFS_250DPS;
         uint8_t mAccelScale = AFS_2G;
         
+        float mGyroResolution = 1.0;
+        float mAccelResolution = 1.0;
+        
+        float mGyroCalibration[3];
+        float mAccelCalibration[3];
+        
+        int16_t mAccelCurrent[3];  // Stores the 16-bit signed accelerometer sensor output
+        int16_t mGyroCurrent[3];   // Stores the 16-bit signed gyro sensor output
+        
         void read_data(uint8_t address, int16_t* dest);
         void read_data_sum(uint8_t address, int16_t* dest);
+       
+        void calibrate();
     public:
+        float acc_x = 0;
+        float acc_y = 0;
+        float acc_z = 0;
+        
+        float gyro_x = 0;
+        float gyro_y = 0;
+        float gyro_z = 0;
+        
+        
         /*
          * constructor
          */
@@ -163,7 +183,8 @@ class MPU9250
         bool available(void);
         
         void init(void);
-        void calibrate(void);
+        
+        void receive(void);
         
         /**
          * returns current gyro data
@@ -178,6 +199,9 @@ class MPU9250
          * @param dest length: 3*sizeof(int16_t)
          */
         void accel_data(int16_t* dest);
+        
+        float calc_gyro_resolution(int gyroResolution);
+        float calc_accel_resolution(int accelResolution);
         
         /**
          * executes a self test of the MPU9250
