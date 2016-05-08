@@ -26,7 +26,7 @@
 #define MPU9250_CONFIG                      0x1A
 #define MPU9250_GYRO_CONFIG                 0x1B
 #define MPU9250_ACCEL_CONFIG                0x1C
-#define MPU9250_ACCEL_CONFIG_2              0x1D
+#define MPU9250_ACCEL_CONFIG2               0x1D
 #define MPU9250_LP_ACCEL_ODR                0x1E
 #define MPU9250_WOM_THR                     0x1F
 #define MPU9250_FIFO_EN                     0x23
@@ -112,6 +112,19 @@
 #define MPU9250_ZA_OFFSET_L                 0x7E
 
 
+enum AccelScale {
+  AFS_2G = 0,
+  AFS_4G,
+  AFS_8G,
+  AFS_16G
+};
+
+enum GyroScale {
+  GFS_250DPS = 0,
+  GFS_500DPS,
+  GFS_1000DPS,
+  GFS_2000DPS
+};
 
 
 /*
@@ -123,10 +136,22 @@ class MPU9250
 {
     private:
         I2C* mI2C;
-       
+        int mNrOfSelfTestSamples = 500;
+        const int mSelfTestAddr[6] = {
+            MPU9250_SELF_TEST_X_ACCEL,
+            MPU9250_SELF_TEST_Y_ACCEL,
+            MPU9250_SELF_TEST_Z_ACCEL,
+            MPU9250_SELF_TEST_X_GYRO,
+            MPU9250_SELF_TEST_Y_GYRO,
+            MPU9250_SELF_TEST_Z_GYRO
+        };
+      
+        uint8_t mGyroScale = GFS_250DPS;
+        uint8_t mAccelScale = AFS_2G;
         
+        void read_data(uint8_t address, int16_t* dest);
+        void read_data_sum(uint8_t address, int16_t* dest);
     public:
-        
         /*
          * constructor
          */
@@ -136,7 +161,31 @@ class MPU9250
          * @return if the MPU9250 is available or not
          */
         bool available(void);
-       
+        
+        void init(void);
+        void calibrate(void);
+        
+        /**
+         * returns current gyro data
+         * 
+         * @param dest length: 3*sizeof(int16_t)
+         */
+        void gyro_data(int16_t* dest);
+        
+        /**
+         * returns current accelerometer data
+         * 
+         * @param dest length: 3*sizeof(int16_t)
+         */
+        void accel_data(int16_t* dest);
+        
+        /**
+         * executes a self test of the MPU9250
+         * 
+         * @param dest float length: 6
+         */
+        void self_test(float* dest);
+        void self_test_dump(float* selftest);
 };
 
 #endif
