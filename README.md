@@ -3,8 +3,8 @@
 
 
 	this library has been tested with arduino due
-	for testing purposes the breakout board has been connected directly to t
-he 3.3v output pin of the arduino due.
+	for testing purposes the breakout board has been connected 
+	directly to the 3.3v output pin of the arduino due.
 
 	10DOF ----> Arduino
 	SDA   ----> SDA (20)
