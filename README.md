@@ -47,5 +47,5 @@ void loop() {
 
 ```
 
-this work is based on the work of:
+References:
 https://github.com/kriswiner/MPU-9250/blob/master/MPU9250_MS5611_BasicAHRS_t3.ino
